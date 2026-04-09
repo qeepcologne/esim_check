@@ -75,6 +75,16 @@ public class EsimCheckPlugin: NSObject, FlutterPlugin {
         "iPad16,4",
         // iPad Pro 13" M4 (2024)
         "iPad16,6",
+        // iPad Air 11" M3 (2025)
+        "iPad15,4",
+        // iPad Air 13" M3 (2025)
+        "iPad15,6",
+        // iPad 11th gen A16 (2025)
+        "iPad15,8",
+        // iPad Pro 11" M5 (2025)
+        "iPad17,2",
+        // iPad Pro 13" M5 (2025)
+        "iPad17,4",
     ]
 
     private static func isEsimCapable(additionalModels: [String]) -> Bool {
