@@ -21,7 +21,7 @@ import 'package:esim_check/esim_check.dart';
 final supported = await EsimCheck.isSupported();
 ```
 
-Returns `true` if the device has eSIM hardware, `false` otherwise. On Android below API 28 and on emulators/simulators it safely returns `false`.
+Returns `true` if the device has eSIM hardware, `false` otherwise. On Android below API 28, on emulators/simulators, and on unsupported platforms (web, desktop) it safely returns `false`. Note: some Windows/macOS devices have eSIM hardware but no platform implementation exists for desktop — contributions welcome.
 
 ## Why not use existing packages?
 
