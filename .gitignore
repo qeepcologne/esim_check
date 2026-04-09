@@ -4,4 +4,6 @@
 .dart_tool/
 .flutter-plugins-dependencies
 /pubspec.lock
-/build/
+build/
+.gradle/
+local.properties
