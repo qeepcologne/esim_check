@@ -27,10 +27,12 @@ public class EsimCheckPlugin: NSObject, FlutterPlugin {
         }
     }
 
-    // Cellular iPad models with eSIM (2018+).
-    // WiFi-only iPads never have eSIM. Unlike iPhones there is no clean
-    // numbering heuristic, so we list cellular identifiers explicitly.
+    // Cellular iPad models with eSIM (iPad7–14). The minor numbering is
+    // inconsistent across these generations so we list them explicitly.
+    // From iPad15 onward, even minor = cellular = eSIM (handled by heuristic).
     private static let esimCapableIPads: Set<String> = [
+        // iPad 7th gen (2019)
+        "iPad7,12",
         // iPad Pro 11" 1st gen (2018)
         "iPad8,3", "iPad8,4",
         // iPad Pro 12.9" 3rd gen (2018)
@@ -45,8 +47,6 @@ public class EsimCheckPlugin: NSObject, FlutterPlugin {
         "iPad11,4",
         // iPad 8th gen (2020)
         "iPad11,7",
-        // iPad 7th gen (2019)
-        "iPad7,12",
         // iPad 9th gen (2021)
         "iPad12,2",
         // iPad Air 4 (2020)
@@ -69,23 +69,15 @@ public class EsimCheckPlugin: NSObject, FlutterPlugin {
         "iPad14,9",
         // iPad Air 13" M2 (2024)
         "iPad14,11",
-        // iPad mini 7 (2024)
-        "iPad16,2",
-        // iPad Pro 11" M4 (2024)
-        "iPad16,4",
-        // iPad Pro 13" M4 (2024)
-        "iPad16,6",
-        // iPad Air 11" M3 (2025)
-        "iPad15,4",
-        // iPad Air 13" M3 (2025)
-        "iPad15,6",
-        // iPad 11th gen A16 (2025)
-        "iPad15,8",
-        // iPad Pro 11" M5 (2025)
-        "iPad17,2",
-        // iPad Pro 13" M5 (2025)
-        "iPad17,4",
     ]
+
+    private static func parseMajorMinor(_ machine: String, prefix: String) -> (Int, Int)? {
+        let digits = machine.dropFirst(prefix.count)
+        guard let comma = digits.firstIndex(of: ","),
+              let major = Int(digits[digits.startIndex..<comma]),
+              let minor = Int(digits[digits.index(after: comma)...]) else { return nil }
+        return (major, minor)
+    }
 
     private static func isEsimCapable(additionalModels: [String]) -> Bool {
         let machine = machineIdentifier()
@@ -93,18 +85,21 @@ public class EsimCheckPlugin: NSObject, FlutterPlugin {
         if additionalModels.contains(machine) { return true }
 
         if machine.hasPrefix("iPad") {
+            guard let (major, minor) = parseMajorMinor(machine, prefix: "iPad") else { return false }
+            // From iPad15+, even minor = cellular = eSIM capable
+            if major >= 15 { return minor % 2 == 0 }
+            // Older iPads: explicit list
             return esimCapableIPads.contains(machine)
         }
 
-        // All iPhones from iPhone XS (iPhone11,x) onward support eSIM,
-        // except iPhone11,4 (China XS Max with dual physical SIM).
-        guard machine.hasPrefix("iPhone") else { return false }
-        let digits = machine.dropFirst(6)
-        guard let comma = digits.firstIndex(of: ","),
-              let major = Int(digits[digits.startIndex..<comma]) else { return false }
+        if machine.hasPrefix("iPhone") {
+            guard let (major, _) = parseMajorMinor(machine, prefix: "iPhone") else { return false }
+            // All iPhones from iPhone XS (iPhone11,x) onward support eSIM,
+            // except iPhone11,4 (China XS Max with dual physical SIM).
+            if major >= 12 { return true }
+            if major == 11 { return machine != "iPhone11,4" }
+        }
 
-        if major >= 12 { return true }
-        if major == 11 { return machine != "iPhone11,4" }
         return false
     }
 }

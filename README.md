@@ -53,7 +53,13 @@ Apple's `CTCellularPlanProvisioning.supportsCellularPlan()` requires the `com.ap
 
 The `CTTelephonyNetworkInfo` workaround (counting SIM service keys) broke in iOS 16 when Apple deprecated `CTCarrier`.
 
-This plugin uses the device model identifier (`utsname`) instead. All iPhones from iPhone XS (iPhone11,x) onward support eSIM, except `iPhone11,4` (China XS Max with dual physical SIM slot instead of eSIM). Cellular iPads from 2018 onward are matched against an explicit identifier list (WiFi-only iPads never have eSIM). Use `additionalModels` to cover new devices before the plugin is updated. Simulators return the host architecture (`arm64`/`x86_64`) which doesn't match any device pattern, so they correctly return `false`.
+This plugin uses the device model identifier (`utsname`) instead:
+
+- **iPhones**: All models from iPhone XS (`iPhone11,x`) onward support eSIM, except `iPhone11,4` (China XS Max with dual physical SIM). Uses major version heuristic — future-proof.
+- **iPads (2025+)**: From `iPad15,x` onward, even minor number = cellular = eSIM capable (odd = WiFi-only). Future-proof heuristic.
+- **iPads (2018–2024)**: `iPad7`–`iPad14` cellular models are matched against an explicit list (minor numbering is inconsistent across these generations).
+
+Use `additionalModels` to cover any missing models. Simulators return the host architecture (`arm64`/`x86_64`) which doesn't match any device pattern, so they correctly return `false`.
 
 ### Mainland China limitation
 
