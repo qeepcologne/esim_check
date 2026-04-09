@@ -1,0 +1,22 @@
+name: esim_check
+description: Check eSIM support using native APIs (EuiccManager on Android, CTCellularPlanProvisioning on iOS).
+version: 1.0.0
+repository: https://github.com/qeepcologne/esim_check
+
+environment:
+  sdk: ^3.11.4
+  flutter: '>=3.41.6'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.qeepcologne.esim_check
+        pluginClass: EsimCheckPlugin
+      ios:
+        pluginClass: EsimCheckPlugin
+        sharedDarwinSource: true
