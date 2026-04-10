@@ -25,7 +25,7 @@ Returns `true` if the device has eSIM hardware, `false` otherwise.
 
 ### Extending the iOS device list
 
-The plugin includes all iPhones from iPhone XS onward (excluding the China XS Max dual-SIM variant) and cellular iPads from 2018 onward. For new or missing devices, pass additional machine identifiers:
+The plugin includes all iPhones from iPhone XS onward (excluding the China XS Max dual-SIM variant) and cellular iPads from 2018 through 2026. For new or missing devices, pass additional machine identifiers:
 
 ```dart
 final supported = await EsimCheck.isSupported(
@@ -56,8 +56,8 @@ The `CTTelephonyNetworkInfo` workaround (counting SIM service keys) broke in iOS
 This plugin uses the device model identifier (`utsname`) instead:
 
 - **iPhones**: All models from iPhone XS (`iPhone11,x`) onward support eSIM, except `iPhone11,4` (China XS Max with dual physical SIM). Uses major version heuristic — future-proof.
-- **iPads (2025+)**: From `iPad15,x` onward, even minor number = cellular = eSIM capable (odd = WiFi-only). Future-proof heuristic.
-- **iPads (2018–2024)**: `iPad7`–`iPad14` cellular models are matched against an explicit list (minor numbering is inconsistent across these generations).
+- **iPads (2026+)**: From `iPad18,x` onward, even minor number = cellular = eSIM capable (odd = WiFi-only). Future-proof heuristic. Note: the even-minor pattern broke for `iPad16,8`–`iPad16,11` (2026 iPad Air M4), so all models through `iPad17` are listed explicitly.
+- **iPads (2018–2025)**: `iPad7`–`iPad17` cellular models are matched against an explicit list (minor numbering is inconsistent — e.g. `iPad16,9` is cellular while `iPad16,8` is WiFi-only).
 
 Use `additionalModels` to cover any missing models. Simulators return the host architecture (`arm64`/`x86_64`) which doesn't match any device pattern, so they correctly return `false`.
 

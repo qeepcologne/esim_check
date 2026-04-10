@@ -27,9 +27,9 @@ public class EsimCheckPlugin: NSObject, FlutterPlugin {
         }
     }
 
-    // Cellular iPad models with eSIM (iPad7–14). The minor numbering is
-    // inconsistent across these generations so we list them explicitly.
-    // From iPad15 onward, even minor = cellular = eSIM (handled by heuristic).
+    // Cellular iPad models with eSIM (iPad7–17). Listed explicitly because
+    // the minor numbering is inconsistent (e.g. iPad16,8–11 break even=cellular).
+    // From iPad18 onward, even minor = cellular = eSIM (handled by heuristic).
     private static let esimCapableIPads: Set<String> = [
         // iPad 7th gen (2019)
         "iPad7,12",
@@ -69,6 +69,26 @@ public class EsimCheckPlugin: NSObject, FlutterPlugin {
         "iPad14,9",
         // iPad Air 13" M2 (2024)
         "iPad14,11",
+        // iPad Air 11" M3 (2025)
+        "iPad15,4",
+        // iPad Air 13" M3 (2025)
+        "iPad15,6",
+        // iPad 11th gen (2025)
+        "iPad15,8",
+        // iPad mini 7 (2024)
+        "iPad16,2",
+        // iPad Pro 11" M4 (2024)
+        "iPad16,4",
+        // iPad Pro 13" M4 (2024)
+        "iPad16,6",
+        // iPad Air 11" M4 (2026)
+        "iPad16,9",
+        // iPad Air 13" M4 (2026)
+        "iPad16,11",
+        // iPad Pro 11" M5 (2025)
+        "iPad17,2",
+        // iPad Pro 13" M5 (2025)
+        "iPad17,4",
     ]
 
     private static func parseMajorMinor(_ machine: String, prefix: String) -> (Int, Int)? {
@@ -86,8 +106,13 @@ public class EsimCheckPlugin: NSObject, FlutterPlugin {
 
         if machine.hasPrefix("iPad") {
             guard let (major, minor) = parseMajorMinor(machine, prefix: "iPad") else { return false }
-            // From iPad15+, even minor = cellular = eSIM capable
-            if major >= 15 { return minor % 2 == 0 }
+            // From iPad18+, even minor = cellular = eSIM capable.
+            // Apple pairs each iPad as (odd = WiFi, even = WiFi+Cellular),
+            // e.g. iPad15,3/4, iPad17,1/2. This held for iPad15–17 except
+            // iPad16,8–11 where Apple skipped ,7 and reset the parity.
+            // Those are covered by the explicit list above; the heuristic
+            // is a best-effort fallback for future models.
+            if major >= 18 { return minor % 2 == 0 }
             // Older iPads: explicit list
             return esimCapableIPads.contains(machine)
         }
