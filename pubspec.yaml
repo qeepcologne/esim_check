@@ -1,6 +1,6 @@
 name: esim_check
-description: Check eSIM support using native APIs (EuiccManager on Android, CTCellularPlanProvisioning on iOS).
-version: 1.0.0
+description: Check eSIM support using native APIs (EuiccManager on Android, device model identifier on iOS).
+version: 1.1.0
 repository: https://github.com/qeepcologne/esim_check
 
 environment:

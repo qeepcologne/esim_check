@@ -10,8 +10,9 @@ public class EsimCheckPlugin: NSObject, FlutterPlugin {
         switch call.method {
         case "isSupported":
             let args = call.arguments as? [String: Any]
-            let additional = args?["additionalModels"] as? [String] ?? []
-            result(Self.isEsimCapable(additionalModels: additional))
+            let include = args?["includeModels"] as? [String] ?? []
+            let exclude = args?["excludeModels"] as? [String] ?? []
+            result(Self.isEsimCapable(includeModels: include, excludeModels: exclude))
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -99,10 +100,9 @@ public class EsimCheckPlugin: NSObject, FlutterPlugin {
         return (major, minor)
     }
 
-    private static func isEsimCapable(additionalModels: [String]) -> Bool {
+    private static func isEsimCapable(includeModels: [String], excludeModels: [String]) -> Bool {
         let machine = machineIdentifier()
         // Simulators return "arm64" or "x86_64" — no match, returns false
-        if additionalModels.contains(machine) { return true }
 
         if machine.hasPrefix("iPad") {
             guard let (major, minor) = parseMajorMinor(machine, prefix: "iPad") else { return false }
@@ -112,7 +112,12 @@ public class EsimCheckPlugin: NSObject, FlutterPlugin {
             // iPad16,8–11 where Apple skipped ,7 and reset the parity.
             // Those are covered by the explicit list above; the heuristic
             // is a best-effort fallback for future models.
-            if major >= 18 { return minor % 2 == 0 }
+            // include/exclude override the heuristic for iPad18+ only.
+            if major >= 18 {
+                if excludeModels.contains(machine) { return false }
+                if includeModels.contains(machine) { return true }
+                return minor % 2 == 0
+            }
             // Older iPads: explicit list
             return esimCapableIPads.contains(machine)
         }

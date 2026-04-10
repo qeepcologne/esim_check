@@ -7,15 +7,19 @@ class EsimCheck {
   ///
   /// On iOS, detection uses the device model identifier since Apple's
   /// CTCellularPlanProvisioning API requires a restricted carrier entitlement.
-  /// Pass [additionalIosModels] to extend the built-in iOS device list with
-  /// new machine identifiers (e.g. `["iPhone20,1", "iPad19,2"]`).
-  /// Ignored on Android where `EuiccManager` detects eSIM hardware directly.
+  /// Both parameters are iOS-only — Android uses `EuiccManager` directly.
+  /// They override the even-minor heuristic for future iPads (iPad18+) only.
+  /// [includeIosModels] forces identifiers to be treated as eSIM-capable.
+  /// [excludeIosModels] forces identifiers to be treated as not capable
+  /// and takes priority over [includeIosModels].
   static Future<bool> isSupported({
-    List<String> additionalIosModels = const [],
+    List<String> includeIosModels = const [],
+    List<String> excludeIosModels = const [],
   }) async {
     try {
       return await _channel.invokeMethod<bool>('isSupported', {
-            'additionalModels': additionalIosModels,
+            'includeModels': includeIosModels,
+            'excludeModels': excludeIosModels,
           }) ??
           false;
     } on MissingPluginException {
