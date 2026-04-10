@@ -29,23 +29,22 @@ The plugin includes all iPhones from iPhone XS onward (excluding the China XS Ma
 
 ```dart
 final supported = await EsimCheck.isSupported(
-  additionalModels: ['iPhone20,1', 'iPad15,1'],
+  additionalIosModels: ['iPhone20,1', 'iPad19,2'],
 );
 ```
-
-The `additionalModels` parameter is ignored on Android (where the real API is available).
 
 ### Platform behavior
 
 | Platform | Method | Fallback |
 |---|---|---|
 | Android >= API 28 | `EuiccManager.isEnabled()` | — |
-| Android < API 28 | — | Returns `false` |
+| Android < API 28 | — | Returns `false` (no Android device with eSIM shipped before API 28) |
 | iOS | Machine identifier lookup | Returns `false` for unknown models |
+| Android Emulator | `EuiccManager.isEnabled()` | Returns `false` (no eSIM hardware) |
 | iOS Simulator | — | Returns `false` (no eSIM hardware) |
 | Web, desktop | — | Returns `false` |
 
-Note: some Windows/macOS laptops have eSIM hardware but no platform implementation exists for desktop — contributions welcome.
+Note: some Windows/macOS laptops and tablets (e.g. Surface Pro) have eSIM hardware but no platform implementation exists for desktop — contributions welcome. Apple Watch supports eSIM but Flutter does not run on watchOS.
 
 ## iOS detection details
 
@@ -59,7 +58,7 @@ This plugin uses the device model identifier (`utsname`) instead:
 - **iPads (2026+)**: From `iPad18,x` onward, even minor number = cellular = eSIM capable (odd = WiFi-only). Future-proof heuristic. Note: the even-minor pattern broke for `iPad16,8`–`iPad16,11` (2026 iPad Air M4), so all models through `iPad17` are listed explicitly.
 - **iPads (2018–2025)**: `iPad7`–`iPad17` cellular models are matched against an explicit list (minor numbering is inconsistent — e.g. `iPad16,9` is cellular while `iPad16,8` is WiFi-only).
 
-Use `additionalModels` to cover any missing models. Simulators return the host architecture (`arm64`/`x86_64`) which doesn't match any device pattern, so they correctly return `false`.
+Use `additionalIosModels` to cover any missing models. Simulators return the host architecture (`arm64`/`x86_64`) which doesn't match any device pattern, so they correctly return `false`.
 
 ### Mainland China limitation
 
