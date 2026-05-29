@@ -1,4 +1,6 @@
-import Flutter
+// Flutter's globals (e.g. FlutterMethodNotImplemented) aren't concurrency-annotated; @preconcurrency
+// exempts them from the Swift 6 strict-concurrency checks they'd otherwise trip. Don't drop it.
+@preconcurrency import Flutter
 
 public final class EsimCheckPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {

@@ -1,3 +1,7 @@
+## 1.1.2
+
+- Fix iOS build failure under Swift 6 (`@preconcurrency import Flutter`). 1.1.1 did not compile on iOS.
+
 ## 1.1.1
 
 - Build tooling only — Swift 6.2 / Swift 6 language mode (building now requires **Xcode 26+**) and a simpler Android Gradle file.
