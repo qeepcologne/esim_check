@@ -1,6 +1,6 @@
 name: esim_check
 description: Check eSIM support using native APIs (EuiccManager on Android, device model identifier on iOS).
-version: 1.1.0
+version: 1.1.1
 repository: https://github.com/qeepcologne/esim_check
 
 environment:
@@ -10,6 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
 
 flutter:
   plugin:

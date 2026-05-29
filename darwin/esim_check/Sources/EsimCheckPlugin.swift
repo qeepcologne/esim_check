@@ -1,6 +1,6 @@
 import Flutter
 
-public class EsimCheckPlugin: NSObject, FlutterPlugin {
+public final class EsimCheckPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "esim_check", binaryMessenger: registrar.messenger())
         registrar.addMethodCallDelegate(EsimCheckPlugin(), channel: channel)
