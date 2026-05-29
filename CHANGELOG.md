@@ -1,7 +1,6 @@
 ## 1.1.1
 
-- **iOS**: bump `swift-tools-version` to 6.2 and adopt the Swift 6 language mode. No API or runtime change; the iOS runtime floor stays at 15. Building now requires **Xcode 26+** (Swift 6.2 toolchain).
-- **Android**: simplify `build.gradle.kts` — drop the `sourceSets` override (AGP 9's built-in Kotlin recognizes `src/main/kotlin` automatically) and the redundant `compileOptions` Java-level block (the consuming app sets the Java/JVM target across all modules). No build-output change.
+- Build tooling only — Swift 6.2 / Swift 6 language mode (building now requires **Xcode 26+**) and a simpler Android Gradle file.
 
 ## 1.1.0
 
