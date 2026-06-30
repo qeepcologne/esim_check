@@ -1,6 +1,8 @@
 ## 1.1.3
 
 - Add usage example (`example/lib/main.dart`).
+- Add `topics` and `issue_tracker` to pubspec for pub.dev discoverability.
+- Remove deprecated `package` attribute from Android manifest (namespace is set in Gradle).
 
 ## 1.1.2
 
