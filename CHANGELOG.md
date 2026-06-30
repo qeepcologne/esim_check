@@ -1,3 +1,7 @@
+## 1.1.3
+
+- Add usage example (`example/lib/main.dart`).
+
 ## 1.1.2
 
 - Fix iOS build failure under Swift 6 (`@preconcurrency import Flutter`). 1.1.1 did not compile on iOS.
