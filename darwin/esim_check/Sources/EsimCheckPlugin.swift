@@ -20,15 +20,14 @@ public final class EsimCheckPlugin: NSObject, FlutterPlugin {
         }
     }
 
-    private static func machineIdentifier() -> String {
+    // Constant for the lifetime of the process — computed once.
+    private static let machineIdentifier: String = {
         var systemInfo = utsname()
         uname(&systemInfo)
-        return withUnsafePointer(to: &systemInfo.machine) {
-            $0.withMemoryRebound(to: CChar.self, capacity: 1) {
-                String(cString: $0)
-            }
+        return withUnsafeBytes(of: &systemInfo.machine) { raw in
+            String(decoding: raw.prefix(while: { $0 != 0 }), as: UTF8.self)
         }
-    }
+    }()
 
     // Cellular iPad models with eSIM (iPad7–17). Listed explicitly because
     // the minor numbering is inconsistent (e.g. iPad16,8–11 break even=cellular).
@@ -103,7 +102,7 @@ public final class EsimCheckPlugin: NSObject, FlutterPlugin {
     }
 
     private static func isEsimCapable(includeModels: [String], excludeModels: [String]) -> Bool {
-        let machine = machineIdentifier()
+        let machine = machineIdentifier
         // Simulators return "arm64" or "x86_64" — no match, returns false
 
         if machine.hasPrefix("iPad") {

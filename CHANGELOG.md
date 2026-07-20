@@ -1,3 +1,9 @@
+## 1.1.4
+
+- Return `false` instead of throwing when the native lookup fails (`PlatformException` is now caught, matching the documented contract).
+- Compute the iOS machine identifier once instead of on every call.
+- Prevent instantiation of the static-only `EsimCheck` class.
+
 ## 1.1.3
 
 - Add usage example (`example/lib/main.dart`).

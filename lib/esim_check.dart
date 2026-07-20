@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 
 class EsimCheck {
+  EsimCheck._();
+
   static const _channel = MethodChannel('esim_check');
 
   /// Returns `true` if the device has eSIM hardware.
@@ -23,6 +25,10 @@ class EsimCheck {
           }) ??
           false;
     } on MissingPluginException {
+      return false;
+    } on PlatformException {
+      // Native lookup failed (e.g. binder error on an OEM device) — treat as
+      // unsupported rather than surfacing an exception to the caller.
       return false;
     }
   }
