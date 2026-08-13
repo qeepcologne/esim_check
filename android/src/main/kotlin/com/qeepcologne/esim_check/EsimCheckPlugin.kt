@@ -19,17 +19,11 @@ class EsimCheckPlugin : FlutterPlugin, MethodCallHandler {
         context = binding.applicationContext
     }
 
-    override fun onMethodCall(call: MethodCall, result: Result) {
-        if (call.method == "isSupported") {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-                result.success(false)
-            } else {
-                val manager = context.getSystemService(Context.EUICC_SERVICE) as? EuiccManager
-                result.success(manager?.isEnabled == true)
-            }
-        } else {
-            result.notImplemented()
-        }
+    override fun onMethodCall(call: MethodCall, result: Result) = when (call.method) {
+        //EuiccManager exists from API 28; below that there is no platform answer, so report unsupported
+        "isSupported" if Build.VERSION.SDK_INT < Build.VERSION_CODES.P -> result.success(false)
+        "isSupported" -> result.success((context.getSystemService(Context.EUICC_SERVICE) as? EuiccManager)?.isEnabled == true)
+        else -> result.notImplemented()
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {

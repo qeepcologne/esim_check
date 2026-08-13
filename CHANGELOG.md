@@ -1,6 +1,7 @@
 ## 1.2.0
 
 - Requires **Dart 3.13 / Flutter 3.47** (`sdk: ^3.13.0`, `flutter: >=3.47.0`) — the toolchain this package is now built and tested against.
+- `onMethodCall` is a single `when` with a Kotlin guard (`"isSupported" if SDK_INT < P ->`) instead of nested `if`/`else`. No behaviour change; guards need Kotlin 2.2, which AGP 9 already provides.
 
 ## 1.1.4
 
