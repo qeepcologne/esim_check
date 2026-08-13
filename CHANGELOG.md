@@ -1,3 +1,7 @@
+## 1.2.0
+
+- Requires **Dart 3.13 / Flutter 3.47** (`sdk: ^3.13.0`, `flutter: >=3.47.0`) — the toolchain this package is now built and tested against.
+
 ## 1.1.4
 
 - Return `false` instead of throwing when the native lookup fails (`PlatformException` is now caught, matching the documented contract).

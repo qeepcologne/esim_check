@@ -9,7 +9,7 @@ No permissions required. Works offline and in flight mode.
 
 ## Requirements
 
-- Flutter >= 3.41.6
+- Flutter >= 3.47, Dart >= 3.13
 - Android: minSdk 24, AGP 9 (no backward compatibility with older AGP versions)
 - iOS: iOS 15+, Swift Package Manager only (no CocoaPods). Building requires **Xcode 26+** (Swift 6.2 toolchain).
 
