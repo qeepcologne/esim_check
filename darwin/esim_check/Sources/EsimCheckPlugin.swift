@@ -105,6 +105,15 @@ public final class EsimCheckPlugin: NSObject, FlutterPlugin {
         let machine = machineIdentifier
         // Simulators return "arm64" or "x86_64" — no match, returns false
 
+        // Checked before any list or heuristic, so they apply to every identifier.
+        // Apple's numbering is not predictable (iPad16,8–11 already broke the even=cellular
+        // parity), so a model that lands inside a major we treat as "known" can still be
+        // corrected from the app instead of waiting for a package release. Also the only
+        // lever for the China dual-physical-SIM variants, which share identifiers with
+        // their eSIM-capable global counterparts (see README).
+        if excludeModels.contains(machine) { return false }
+        if includeModels.contains(machine) { return true }
+
         if machine.hasPrefix("iPad") {
             guard let (major, minor) = parseMajorMinor(machine, prefix: "iPad") else { return false }
             // From iPad18+, even minor = cellular = eSIM capable.
@@ -113,10 +122,7 @@ public final class EsimCheckPlugin: NSObject, FlutterPlugin {
             // iPad16,8–11 where Apple skipped ,7 and reset the parity.
             // Those are covered by the explicit list above; the heuristic
             // is a best-effort fallback for future models.
-            // include/exclude override the heuristic for iPad18+ only.
             if major >= 18 {
-                if excludeModels.contains(machine) { return false }
-                if includeModels.contains(machine) { return true }
                 return minor % 2 == 0
             }
             // Older iPads: explicit list

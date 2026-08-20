@@ -1,3 +1,7 @@
+## 1.2.1
+
+- `includeIosModels`/`excludeIosModels` now apply to every identifier instead of iPad18+ only — they are checked before the verified lists and the even-minor heuristic. A new iPad numbered inside an existing major (e.g. `iPad17,x`) previously fell through to the explicit list and returned `false` with no way to correct it from the app.
+
 ## 1.2.0
 
 - Requires **Dart 3.13 / Flutter 3.47** (`sdk: ^3.13.0`, `flutter: >=3.47.0`) — the toolchain this package is now built and tested against.

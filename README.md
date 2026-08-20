@@ -23,9 +23,9 @@ final supported = await EsimCheck.isSupported();
 
 Returns `true` if the device has eSIM hardware, `false` otherwise.
 
-### Overriding the iPad18+ heuristic
+### Overriding the detection
 
-iPhones and iPads through iPad17 use verified lists. Future iPads (iPad18+) fall back to an even-minor heuristic that may not hold for every model. Use `includeIosModels` and `excludeIosModels` to correct it:
+`includeIosModels` and `excludeIosModels` are checked **before** the verified lists and the even-minor heuristic, so they can correct any identifier — a new iPad that Apple numbers inside an existing major, a China dual-physical-SIM variant you can identify by other means, or a future model the heuristic guesses wrong:
 
 ```dart
 final supported = await EsimCheck.isSupported(
@@ -33,6 +33,8 @@ final supported = await EsimCheck.isSupported(
   excludeIosModels: ['iPad18,4'],  // WiFi-only model the heuristic matches
 );
 ```
+
+This means a wrong verdict is fixable from the app, without waiting for a new release of this package.
 
 `excludeIosModels` takes priority. Both parameters are iOS-only and ignored on Android.
 
@@ -61,7 +63,7 @@ This plugin uses the device model identifier (`utsname`) instead:
 - **iPads (2026+)**: From `iPad18,x` onward, even minor number = cellular = eSIM capable (odd = WiFi-only). Future-proof heuristic. Note: the even-minor pattern broke for `iPad16,8`–`iPad16,11` (2026 iPad Air M4), so all models through `iPad17` are listed explicitly.
 - **iPads (2018–2025)**: `iPad7`–`iPad17` cellular models are matched against an explicit list (minor numbering is inconsistent — e.g. `iPad16,9` is cellular while `iPad16,8` is WiFi-only).
 
-Use `includeIosModels`/`excludeIosModels` to correct the iPad18+ heuristic for specific models. Simulators return the host architecture (`arm64`/`x86_64`) which doesn't match any device pattern, so they correctly return `false`.
+Use `includeIosModels`/`excludeIosModels` to correct any of the above for specific models. Simulators return the host architecture (`arm64`/`x86_64`) which doesn't match any device pattern, so they correctly return `false`.
 
 ### Mainland China limitation
 

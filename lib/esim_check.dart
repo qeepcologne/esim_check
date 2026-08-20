@@ -10,7 +10,8 @@ class EsimCheck {
   /// On iOS, detection uses the device model identifier since Apple's
   /// CTCellularPlanProvisioning API requires a restricted carrier entitlement.
   /// Both parameters are iOS-only — Android uses `EuiccManager` directly.
-  /// They override the even-minor heuristic for future iPads (iPad18+) only.
+  /// They are checked before the built-in lists and the even-minor heuristic,
+  /// so they can correct any identifier, not just future iPads.
   /// [includeIosModels] forces identifiers to be treated as eSIM-capable.
   /// [excludeIosModels] forces identifiers to be treated as not capable
   /// and takes priority over [includeIosModels].

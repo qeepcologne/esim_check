@@ -6,7 +6,7 @@ Future<void> main() async {
   final supported = await EsimCheck.isSupported();
   print('eSIM supported: $supported');
 
-  // Optional: correct the iPad18+ heuristic for specific iOS models.
+  // Optional: correct the verdict for specific iOS model identifiers.
   final corrected = await EsimCheck.isSupported(
     includeIosModels: ['iPad19,3'], // cellular model the heuristic misses
     excludeIosModels: ['iPad18,4'], // WiFi-only model the heuristic matches
