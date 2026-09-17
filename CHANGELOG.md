@@ -1,3 +1,7 @@
+## 1.2.2
+
+- **iOS**: Xcode floor raised to **27.0** (Swift 6.4 toolchain). `Package.swift` declares `swift-tools-version: 6.4`; no code change. Runtime floor unchanged — still **iOS 15+**, which is also Xcode 27's own minimum deployment target.
+
 ## 1.2.1
 
 - `includeIosModels`/`excludeIosModels` now apply to every identifier instead of iPad18+ only — they are checked before the verified lists and the even-minor heuristic. A new iPad numbered inside an existing major (e.g. `iPad17,x`) previously fell through to the explicit list and returned `false` with no way to correct it from the app.
