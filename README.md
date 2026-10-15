@@ -23,6 +23,8 @@ final supported = await EsimCheck.isSupported();
 
 Returns `true` if the device has eSIM hardware, `false` otherwise.
 
+`true` means eSIM hardware is present, not that a specific eSIM profile can be installed. Carrier locks and regional restrictions (e.g. China mainland only accepts profiles from local carriers on approved models) can still block activation — on any device and platform.
+
 ### Overriding the detection
 
 `includeIosModels` and `excludeIosModels` are checked **before** the verified lists and the even-minor heuristic, so they can correct any identifier — a new iPad that Apple numbers inside an existing major, a China dual-physical-SIM variant you can identify by other means, or a future model the heuristic guesses wrong:
