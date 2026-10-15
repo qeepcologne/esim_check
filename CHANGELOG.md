@@ -1,3 +1,7 @@
+## 1.2.2+1
+
+- README: clarify that `true` means eSIM hardware is present, not that a profile can be installed (carrier/regional locks). Update the mainland China limitation: iPhone Air, 17e, 18 Pro/Pro Max, Duo and 2024+ cellular iPads have eSIM there; older iPhones through the 17 series and 2018–2022 cellular iPads do not. Docs only, no code change.
+
 ## 1.2.2
 
 - **iOS**: Xcode floor raised to **27.0** (Swift 6.4 toolchain). `Package.swift` declares `swift-tools-version: 6.4`; no code change. Runtime floor unchanged — still **iOS 15+**, which is also Xcode 27's own minimum deployment target.
